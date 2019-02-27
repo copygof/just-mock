@@ -65,5 +65,6 @@ node_modules/
 .env
 
 frontend/node_modules/
+frontends/node_modules/
 
 functions/node_modules/
