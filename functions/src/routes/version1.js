@@ -4,17 +4,8 @@ import { success, failure } from './utils'
 
 const router = express.Router()
 
-// schama
-// {
-//   "id": "success",
-//   "json_response": {},
-//   "header": {},
-//   "method": "GET",
-//   "enable": true
-// }
-
 /**
- * Get all API
+ * Get all API list
 */
 router.get('/', (req, res) => {
   return API
@@ -25,7 +16,7 @@ router.get('/', (req, res) => {
 
 
 /**
- * Get all API
+ * Create new endpoint
 */
 router.post('/endpoint', (req, res) => {
   return API
@@ -39,7 +30,7 @@ router.post('/endpoint', (req, res) => {
 
 
 /**
- * Get all API
+ * Create endpoint detail
 */
 router.put('/endpoint', (req, res) => {
   const { endpoint, ...reqData } = req.body
@@ -51,7 +42,7 @@ router.put('/endpoint', (req, res) => {
 
 
 /**
- * Get all API
+ * Create api response by endpoint name
 */
 router.post('/endpoint/response', (req, res) => {
   const { endpoint, response_name, ...reqData } = req.body
@@ -68,7 +59,7 @@ router.post('/endpoint/response', (req, res) => {
 
 
 /**
- * Get all API
+ * Update response details by endpoint name
 */
 router.put('/endpoint/response', (req, res) => {
   const { endpoint, response_name, ...reqData } = req.body
@@ -80,7 +71,7 @@ router.put('/endpoint/response', (req, res) => {
 
 
 /**
- * Get detail by id
+ * All rounte of endpoint defined. 
 */
 router.all('/:endpoint', (req, res) => {
   return Promise.all([
@@ -106,7 +97,7 @@ router.all('/:endpoint', (req, res) => {
 
       if (!isRandomResponse) {
         // when method is not eexits.
-        if (endpointList[0].method.toUpperCase() !== 'GET') {
+        if (endpointList[0].method.toUpperCase() !== req.method.toUpperCase()) {
           return Promise.reject({
             message: 'method is invalid.',
           })
@@ -124,7 +115,7 @@ router.all('/:endpoint', (req, res) => {
       const randomResonseNumber = getRndInteger(0, endpointResponseEnable.length - 1)
 
       // when method is not eexits.
-      if (endpointResponseEnable[randomResonseNumber].method.toUpperCase() !== 'GET') {
+      if (endpointResponseEnable[randomResonseNumber].method.toUpperCase() !== req.method.toUpperCase()) {
         return Promise.reject({
           message: 'method is invalid.',
         })
@@ -147,10 +138,26 @@ router.all('/:endpoint', (req, res) => {
 router.all('/:endpoint/:responseName', (req, res) => {
   return API
     .getAPIEndpointByResponseName(req.params.endpoint, req.params.responseName)
-    .then(data => res
-      .status(data.json_response.code)
-      .header(data.header)
-      .json(data.json_response))
+    .then(data => {
+      // case is not exits in database
+      if (Object.keys(data).length === 0) {
+        return Promise.reject({
+          message: 'endpoint is not exits.',
+        })
+      }
+
+      // when method is not eexits.
+      if (data.method.toUpperCase() !== req.method.toUpperCase()) {
+        return Promise.reject({
+          message: 'method is invalid.',
+        })
+      }
+    
+      return res
+        .status(data.json_response.code)
+        .header(data.header)
+        .json(data.json_response)
+    })
     .catch(error => res.status(400).json(failure(error)))
 })
 

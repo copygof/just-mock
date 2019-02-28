@@ -31,17 +31,9 @@ function _objectWithoutProperties(source, excluded) { if (source == null) return
 
 function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
 
-var router = _express.default.Router(); // schama
-// {
-//   "id": "success",
-//   "json_response": {},
-//   "header": {},
-//   "method": "GET",
-//   "enable": true
-// }
-
+var router = _express.default.Router();
 /**
- * Get all API
+ * Get all API list
 */
 
 
@@ -53,7 +45,7 @@ router.get('/', function (req, res) {
   });
 });
 /**
- * Get all API
+ * Create new endpoint
 */
 
 router.post('/endpoint', function (req, res) {
@@ -67,7 +59,7 @@ router.post('/endpoint', function (req, res) {
   });
 });
 /**
- * Get all API
+ * Create endpoint detail
 */
 
 router.put('/endpoint', function (req, res) {
@@ -82,7 +74,7 @@ router.put('/endpoint', function (req, res) {
   });
 });
 /**
- * Get all API
+ * Create api response by endpoint name
 */
 
 router.post('/endpoint/response', function (req, res) {
@@ -103,7 +95,7 @@ router.post('/endpoint/response', function (req, res) {
   });
 });
 /**
- * Get all API
+ * Update response details by endpoint name
 */
 
 router.put('/endpoint/response', function (req, res) {
@@ -119,7 +111,7 @@ router.put('/endpoint/response', function (req, res) {
   });
 });
 /**
- * Get detail by id
+ * All rounte of endpoint defined. 
 */
 
 router.all('/:endpoint', function (req, res) {
@@ -145,7 +137,7 @@ router.all('/:endpoint', function (req, res) {
 
     if (!isRandomResponse) {
       // when method is not eexits.
-      if (endpointList[0].method.toUpperCase() !== 'GET') {
+      if (endpointList[0].method.toUpperCase() !== req.method.toUpperCase()) {
         return Promise.reject({
           message: 'method is invalid.'
         });
@@ -164,7 +156,7 @@ router.all('/:endpoint', function (req, res) {
 
     var randomResonseNumber = getRndInteger(0, endpointResponseEnable.length - 1); // when method is not eexits.
 
-    if (endpointResponseEnable[randomResonseNumber].method.toUpperCase() !== 'GET') {
+    if (endpointResponseEnable[randomResonseNumber].method.toUpperCase() !== req.method.toUpperCase()) {
       return Promise.reject({
         message: 'method is invalid.'
       });
@@ -181,6 +173,20 @@ router.all('/:endpoint', function (req, res) {
 
 router.all('/:endpoint/:responseName', function (req, res) {
   return API.getAPIEndpointByResponseName(req.params.endpoint, req.params.responseName).then(function (data) {
+    // case is not exits in database
+    if (Object.keys(data).length === 0) {
+      return Promise.reject({
+        message: 'endpoint is not exits.'
+      });
+    } // when method is not eexits.
+
+
+    if (data.method.toUpperCase() !== req.method.toUpperCase()) {
+      return Promise.reject({
+        message: 'method is invalid.'
+      });
+    }
+
     return res.status(data.json_response.code).header(data.header).json(data.json_response);
   }).catch(function (error) {
     return res.status(400).json((0, _utils.failure)(error));
