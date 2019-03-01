@@ -2,14 +2,48 @@ import React, { Component } from 'react';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'semantic-ui-css/semantic.min.css'
-import { Accordion, Button, Radio, Form, Input, Select, Label, TextArea } from 'semantic-ui-react'
-
+import { Accordion, Button, Radio, Form, Input, Select, Label, Modal, Image } from 'semantic-ui-react'
+import AceEditor from 'react-ace';
+import brace from 'brace';
+import jsonMinifier from 'json-minifier'
 import { Header } from './components/Header'
 
+import 'brace/mode/json';
+// import 'brace/theme/github';
+
+const baseUrl = !process.env.NODE_ENV || process.env.NODE_ENV === 'development' ? 'http://localhost:5001/just-mock/us-central1' : 'https://us-central1-just-mock.cloudfunctions.net'
 
 
 
-// const AccordionExampleNested = () => <Accordion defaultActiveIndex={0} panels={rootPanels} styled />
+
+class AddNewApiButton extends Component {
+  handleOnClick = () => {
+
+  }
+
+  render() {
+    return (
+      <Button onClick={this.handleOnClick}>Add new endpoint</Button>
+      // <Modal trigger={<Button>Add new endpoint</Button>}
+      //   style={{ß
+      //     backgroundColor: 'pink',
+      //     width: 200,
+      //     height: 200,
+      //     display: 'block',
+      //     justifyContent: 'center',
+      //     alignItems: 'center',
+      //     alignSelf: 'center',
+      //     margin: '0 auto !important'
+      //   }}
+      // >
+      //   <p>fdsfdsfjdsklfdklsfjdklsfj</p>
+      // </Modal>\
+    
+
+    )
+  }
+}
+
 
 
 class APIList extends Component {
@@ -19,9 +53,9 @@ class APIList extends Component {
   }
 
   async componentDidMount() {
-    const apiList = await this.fetchAPI('http://localhost:5001/just-mock/us-central1/api/v1/')
-    const apiDetail = await Promise.all(apiList.data.map(({ id }) => this.fetchAPI(`http://localhost:5001/just-mock/us-central1/api/v1/${id}?view=true`)))
-    
+    const apiList = await this.fetchAPI(`${baseUrl}/api/v1/`)
+    const apiDetail = await Promise.all(apiList.data.map(({ id }) => this.fetchAPI(`${baseUrl}/api/v1/${id}?view=true`)))
+  
     this.setState({
       apiList: apiList.data.map(({ id, ...res }) => ({
         ...res,
@@ -41,6 +75,7 @@ class APIList extends Component {
       { key: 'PUT', text: 'PUT', value: 'PUT' },
       { key: 'DELETE', text: 'DELETE', value: 'DELETE' },
     ]
+    console.log('fdsnfdsfjdsf', jsonMinifier().minify(data.json_response))
     return (
       <div>
         <Form.Field>
@@ -50,7 +85,7 @@ class APIList extends Component {
         <Form.Field style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Input
             labelPosition='right'
-            value={`https://us-central1-just-mock.cloudfunctions.net/api/v1/${endpoint}/${data.id}`}  
+            value={`${baseUrl}/api/v1/${endpoint}/${data.id}`}  
             action={{ color: 'teal', labelPosition: 'right', icon: 'copy', content: 'Copy' }}
           >
             <Label disabled>Method</Label>
@@ -58,32 +93,52 @@ class APIList extends Component {
           </Input>
           <Input
             action={{ color: 'teal', labelPosition: 'right', icon: 'copy', content: 'Copy' }}
-            value={`https://us-central1-just-mock.cloudfunctions.net/api/v1/${endpoint}/${data.id}`}  
+            value={`${baseUrl}/api/v1/${endpoint}/${data.id}`}  
           />
         </Form.Field>
         <br/>
         <Form>
           <Label>Header</Label>
-          <TextArea
-            autoHeight
-            label='Header'
-            labelPosition='left'
-            placeholder='Header'
-            style={{ minHeight: 100 }}
-            defaultValue={JSON.stringify(data.header)}
-          />
+          <AceEditor
+            mode="json"
+            name="header"
+            // onChange={this.onChange}
+            fontSize={14}
+            showPrintMargin={true}
+            showGutter={true}
+            style={{ minHeight: 50 }}
+            highlightActiveLine={true}
+            value={JSON.stringify(data.header, null, "  ")}
+            setOptions={{
+              enableBasicAutocompletion: true,
+              enableLiveAutocompletion: true,
+              enableSnippets: true,
+              showLineNumbers: true,
+              tabSize: 2,
+            }}
+          />  
         </Form>
         <br/>
         <Form>
           <Label>Json response</Label>
-          <TextArea
-            autoHeight
-            label='Json response'
-            labelPosition='left'
-            placeholder='Json response'
-            style={{ minHeight: 100 }}
-            defaultValue={JSON.stringify(data.json_response)}
-          />
+          <AceEditor
+            mode="json"
+            name="json_response"
+            style={{ minHeight: 50 }}
+            // onChange={this.onChange}
+            fontSize={14}
+            showPrintMargin={true}
+            showGutter={true}
+            highlightActiveLine={true}
+            value={JSON.stringify(data.json_response, null, "  ")}
+            setOptions={{
+              enableBasicAutocompletion: true,
+              enableLiveAutocompletion: true,
+              enableSnippets: true,
+              showLineNumbers: true,
+              tabSize: 2,
+            }}
+          />  
         </Form>
       </div>
     )
@@ -93,17 +148,6 @@ class APIList extends Component {
     let dataItems
 
     if (data.items ) {
-      // {
-      //   "id": "failure",
-      //   "header": {},
-      //   "enable": true,
-      //   "method": "GET",
-      //   "json_response": {
-      //       "error": {
-      //           "message": "data not found."
-      //       },
-      //       "code": "400"
-      //   }
       dataItems = data.items.map(value => ({
         key: `${data.id}${value.id}`,
         title: value.id,
@@ -116,7 +160,7 @@ class APIList extends Component {
         <Form.Field style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginLeft: 26 }}>
           <Input
             action={{ color: 'teal', labelPosition: 'right', icon: 'copy', content: 'Copy' }}
-            value={`https://us-central1-just-mock.cloudfunctions.net/api/v1/${data.id}`}  
+            value={`${baseUrl}/api/v1/${data.id}`}  
           />
         </Form.Field>
         <br />
@@ -156,7 +200,7 @@ class APIList extends Component {
           <h2 class="ui header">Just Mock Api</h2>
          
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <Button>Add new endpoint</Button>
+            <AddNewApiButton />
           </div>
           <br />
           <Accordion
@@ -176,6 +220,11 @@ class App extends Component {
       <div>
         {/* <Header /> */}
         <APIList />
+        <div style={{ zIndex: 9999, width: '100vw', height: '100vh', position: 'absolute',top: 0, left: 0, right: 0,  display: 'flex', justifyContent: 'center', alignItems: 'center', background:'rgba(0,0,0,0.8)' }}>
+          <div style={{  width: '50vw', height: '50vh', borderRadius: 5, padding: 16,  background: '#ffffff', display: 'flex', }}>
+            <p>fhdjshfdjksfhkdsfhkjshf</p>
+          </div>
+        </div>
       </div>
     );
   }

@@ -1,6 +1,5 @@
 {
   "projects": {
-    "just-mock": "just-mock",
-    "default": "just-mock"
+    "just-mock": "just-mock"
   }
 }
