@@ -1,0 +1,16 @@
+
+
+.field-items-input {
+  cursor: pointer;
+  /* border: 0px; */
+  height: 30pt;
+  display: flex;
+  flex: 1;
+  width: 100%;
+
+  border-bottom: 1px solid #87d1ff;
+}
+
+.field-items-input:hover {
+  background-color: #f4fafd;
+}

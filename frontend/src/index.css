@@ -6,9 +6,70 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  background-color: #f6f8f9;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+button:focus {
+  outline: 0;
+}
+button,
+input,
+optgroup,
+select,
+textarea {
+  font-family: inherit; /* 1 */
+  font-size: 100%; /* 1 */
+  line-height: 1.15; /* 1 */
+  margin: 0; /* 2 */
+}
+input,
+textarea {
+  border: none;
+  overflow: auto;
+  outline: none;
+
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+
+  resize: none; /*remove the resize handle on the bottom right*/
+}
+
+/* Color pallate */
+/* 
+#ff5757
+#ffa254
+#fff97a
+#87d1ff
+#73aeff
+
+*/
+
+.btn {
+  cursor: pointer;
+  text-transform: none;
+  display: flex;
+  justify-items: center;
+  align-items: center;
+  min-width: 30pt;
+  height: 33pt;
+  padding: 8pt;
+  border: 0;
+  border-radius: 6pt;
+
+  background-color: #ffa254;
+  color: #ffffff;
+
+  font-size: 12pt;
+  font-weight: 600;
+}
+
+.btn:hover {
+  background-color: #f87d19;
 }
