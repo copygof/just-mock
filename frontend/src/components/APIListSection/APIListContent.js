@@ -9,6 +9,7 @@ function APIListContent(props) {
         <FieldItem
           key={`item-${item.id}-${index}`}
           value={item.apiName}
+          onChange={apiName => props.onChange(apiName, item.id)}
           onClick={() => props.onClick(item.id)}
           onEnter={apiName => props.onEnter({ ...item, apiName })} />
       ))}
@@ -20,6 +21,7 @@ APIListContent.defaultProps = {
   apiList: [],
   onEnter() {},
   onClick() {},
+  onChange() {},
 }
 
 export default APIListContent
