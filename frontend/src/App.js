@@ -7,15 +7,9 @@ import './App.css'
 function App() {
   return (
     <div id="app">
-      <APIListSection />
-      <div className="content">
-        <div className="content-top">
-          <APIDetailSection />
-        </div>
-        <div className="content-bottom">
-          <APIResponseSection />
-        </div>
-      </div>
+      <div className="api-list-section"><APIListSection /></div>
+      <div className="api-detail-section"><APIDetailSection /></div>
+      <div className="api-response-section"><APIResponseSection /></div>
     </div>
   )
 }

@@ -6,18 +6,22 @@
   height: -webkit-fill-available;
 }
 
-.content {
+.api-list-section {
   display: flex;
-  flex: 3;
-  flex-direction: column;
+  width: 200pt;
+  /* flex: 1; */
+  /* align-self: stretch; */
 }
 
-.content-top {
+.api-detail-section {
+  width: 200pt;
   display: flex;
-  flex: 0.5;
+  flex: 1;
+  align-self: flex-start;
 }
 
-.content-bottom {
+.api-response-section {
+  width: 300pt;
   display: flex;
   flex: 1;
 }

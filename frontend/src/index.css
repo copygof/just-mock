@@ -10,6 +10,10 @@ body {
   background-color: #f6f8f9;
 }
 
+#root {
+  display: flex;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
@@ -72,4 +76,30 @@ textarea {
 
 .btn:hover {
   background-color: #f87d19;
+}
+
+
+.divider {
+  background-color: #dfe6e8;
+  height: 1pt;
+}
+
+
+input {
+  /* background-color: pink; */
+  color: #333333;
+  font-size: 12pt;
+  display: flex;
+  height: 16pt;
+  padding: 8pt;
+  border-radius: 2pt;
+  border: 1pt solid #e0eaec;
+  flex: 1;
+}
+
+input:hover {
+  border: 1pt solid #dfe6e8;
+}
+input:focus-within {
+  border: 1pt solid #c5ccce;
 }

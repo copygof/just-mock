@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux'
-import apiList from '../BL/apiList'
+import apiList from './apiList'
 
 export default combineReducers({
   apiList,

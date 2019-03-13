@@ -6,12 +6,10 @@ const initialState = reducer()
 
 const Dispatch = createContext(initialState)
 const Store = createContext(initialState)
-// logger
-// ({ getState }) => next => (action) => {
+
 const createStore = () => useReducer(reducer, initialState)
 const getStore = () => ({
   dispatch: useContext(Dispatch),
-  // dispatch: (action) => logger({ getState() {} })(useContext(Dispatch))(action),
   state: useContext(Store),
 })
 
