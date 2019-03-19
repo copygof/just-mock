@@ -30,12 +30,12 @@ router.post('/endpoint', (req, res) => {
 
 
 /**
- * Create endpoint detail
+ * Update endpoint detail
 */
 router.put('/endpoint', (req, res) => {
   const { endpoint, ...reqData } = req.body
   return API
-    .addEndpoint(endpoint, reqData)
+    .updateEndpoint(endpoint, reqData)
     .then(data => res.status(200).json(success(data)))
     .catch(error => res.status(400).json(failure(error)))
 })
@@ -45,6 +45,7 @@ router.put('/endpoint', (req, res) => {
  * Create api response by endpoint name
 */
 router.post('/endpoint/response', (req, res) => {
+  console.log('Create api response by endpoint name')
   const { endpoint, response_name, ...reqData } = req.body
   return API
     .addResponseByEndpoint(endpoint, response_name, {
@@ -74,6 +75,7 @@ router.put('/endpoint/response', (req, res) => {
  * All rounte of endpoint defined. 
 */
 router.all('/:endpoint', (req, res) => {
+  console.log('All rounte of endpoint defined. ')
   return Promise.all([
       API.getAPIByEndpointDetail(req.params.endpoint),
       API.getAPIByEndpointList(req.params.endpoint),

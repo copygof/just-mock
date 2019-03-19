@@ -14,14 +14,14 @@
 }
 
 .api-detail-section {
-  width: 200pt;
+  /* width: 200pt; */
   display: flex;
   flex: 1;
   align-self: flex-start;
 }
 
 .api-response-section {
-  width: 300pt;
+  /* width: 300pt; */
   display: flex;
   flex: 1;
 }

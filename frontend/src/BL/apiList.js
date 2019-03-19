@@ -2,7 +2,11 @@
 export const INITIAL_STATE = {
   items: [],
   selected: {
-    id: ''
+    // id: '',
+    // apiName: '',
+    // endpoint: '',
+    // timeout: 0,
+    // isRandom: true,
   }
 }
 
@@ -40,9 +44,50 @@ export function commitAddNewAPIName(apiName, id) {
   }
 }
 
+export const SET_ENDPOINT_NAME = 'SET_ENDPOINT_NAME'
+export function setEndpointName(endpoint, id) {
+  return {
+    type: SET_ENDPOINT_NAME,
+    id,
+    endpoint,
+  }
+}
+
+export const SET_TIMEOUT_VALUE = 'SET_TIMEOUT_VALUE'
+export function setTimeoutValue(timeout, id) {
+  return {
+    type: SET_TIMEOUT_VALUE,
+    id,
+    timeout,
+  }
+}
+
+export const SET_IS_RANDOM = 'SET_IS_RANDOM'
+export function setIsRandom(isRandom, id) {
+  return {
+    type: SET_IS_RANDOM,
+    id,
+    isRandom,
+  }
+}
+
+export const GET_API_LIST = 'GET_API_LIST'
+export function setAPIList(items, id) {
+  return {
+    type: GET_API_LIST,
+    id,
+    items,
+  }
+}
 
 const reducer = (state = INITIAL_STATE, action = {}) => {
   switch (action.type) {
+    case GET_API_LIST: {
+      return {
+        ...state,
+        items: action.items
+      }
+    }
     case SELECT_API_NAME: {
       return {
         ...state,
@@ -58,7 +103,13 @@ const reducer = (state = INITIAL_STATE, action = {}) => {
         ...state,
         items: [
           ...state.items,
-          { id: action.id, apiName: 'New API!!' }
+          {
+            endpoint: '',
+            timeout: 0,
+            isRandom: true,
+            id: action.id,
+            apiName: 'New API!!'
+          }
         ]
       }
     }
@@ -94,6 +145,66 @@ const reducer = (state = INITIAL_STATE, action = {}) => {
           ...state.selected,
           id: action.id,
           apiName: action.apiName,
+        }
+      }
+    }
+    case SET_ENDPOINT_NAME: {
+      return {
+        ...state,
+        items: state.items.map(v => {
+          if (v.id === action.id) {
+            return {
+              ...v,
+              id: action.id,
+              endpoint: action.endpoint,
+            }
+          }
+          return v
+        }),
+        selected: {
+          ...state.selected,
+          id: action.id,
+          endpoint: action.endpoint,
+        }
+      }
+    }
+    case SET_TIMEOUT_VALUE: {
+      return {
+        ...state,
+        items: state.items.map(v => {
+          if (v.id === action.id) {
+            return {
+              ...v,
+              id: action.id,
+              timeout: action.timeout,
+            }
+          }
+          return v
+        }),
+        selected: {
+          ...state.selected,
+          id: action.id,
+          timeout: action.timeout,
+        }
+      }
+    }
+    case SET_IS_RANDOM: {
+      return {
+        ...state,
+        items: state.items.map(v => {
+          if (v.id === action.id) {
+            return {
+              ...v,
+              id: action.id,
+              isRandom: action.isRandom,
+            }
+          }
+          return v
+        }),
+        selected: {
+          ...state.selected,
+          id: action.id,
+          isRandom: action.isRandom,
         }
       }
     }

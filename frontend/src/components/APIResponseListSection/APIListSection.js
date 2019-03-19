@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
+import _ from 'lodash'
 import { Section } from '../Section'
 import APIListHeader from './APIListHeader'
 import APIListContent from './APIListContent'
@@ -20,8 +21,7 @@ function APIListSection() {
   const [hasGetAPIList, setHasGetAPIList] = useState(false)
 
   useEffect(() => {
-
-    if (hasGetAPIList) {
+    if (_.isEmpty(apiList.selected)) {
       return
     }
 
@@ -38,14 +38,14 @@ function APIListSection() {
       .finally(() => {
         setHasGetAPIList(true)
       })
-  }, [hasGetAPIList])
+  }, [apiList.selected])
 
   return (
     <Section>
       <APIListHeader
         onClick={() => dispatch(addNewAPIName())} />
       <APIListContent
-        apiList={apiList.items}
+        // apiList={apiList.items}
         onClick={id => dispatch(selectAPIName(id))}
         onChange={(apiName, id) => dispatch(changeAPIName(apiName, id))}
         onEnter={({ apiName, id }) => commitAddNewAPIName(apiName, id)} />
